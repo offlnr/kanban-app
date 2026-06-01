@@ -1,4 +1,5 @@
 import asyncio
+import re
 from logging.config import fileConfig
 
 from sqlalchemy import pool
@@ -17,7 +18,12 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+# asyncpg doesn't support sslmode= in the URL — strip it and use connect_args instead
+_raw_url = settings.DATABASE_URL
+_needs_ssl = 'sslmode=' in _raw_url
+_clean_url = re.sub(r'[?&]sslmode=\w+', '', _raw_url)
+
+config.set_main_option("sqlalchemy.url", _clean_url)
 
 target_metadata = Base.metadata
 
@@ -49,6 +55,7 @@ async def run_async_migrations() -> None:
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        connect_args={"ssl": True} if _needs_ssl else {},
     )
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
