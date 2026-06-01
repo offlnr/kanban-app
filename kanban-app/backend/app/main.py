@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.models import user, project, phase, work_package, kanban_column, task  # noqa: F401
 
 from app.routers import auth, projects, phases, work_packages, kanban_columns, tasks, users
+from app.core.config import settings
 
 app = FastAPI(
     title="Kanban App API",
@@ -13,7 +14,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite dev server
+    allow_origins=settings.allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
