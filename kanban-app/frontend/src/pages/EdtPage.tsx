@@ -10,6 +10,8 @@ import { projectsService } from '../services/projects.service'
 import { phasesService } from '../services/phases.service'
 import { workPackagesService } from '../services/workPackages.service'
 import { tasksService } from '../services/tasks.service'
+import { kanbanColumnsService } from '../services/kanbanColumns.service'
+import { exportProjectToExcel } from '../utils/exportToExcel'
 import type { Project, Phase, WorkPackage, Task } from '../types'
 
 interface WPWithTasks extends WorkPackage {
@@ -227,6 +229,22 @@ export default function EdtPage() {
     }
   }
 
+  const handleExport = async () => {
+    const columns = await kanbanColumnsService.list(projectId)
+    const allWps: WorkPackage[] = phases.flatMap((p) =>
+      p.workPackages.map(({ tasks: _, ...wp }) => wp as WorkPackage)
+    )
+    const allTasks: Task[] = phases.flatMap((p) => p.workPackages.flatMap((wp) => wp.tasks))
+    const flatPhases: Phase[] = phases.map(({ workPackages: _, ...p }) => p as Phase)
+    exportProjectToExcel({
+      projectName: project?.name ?? 'proyecto',
+      columns,
+      tasks: allTasks,
+      phases: flatPhases,
+      workPackages: allWps,
+    })
+  }
+
   const totalHours = (tasks: Task[]) =>
     tasks.reduce((acc, t) => acc + (t.estimated_hours ?? 0), 0)
 
@@ -259,6 +277,16 @@ export default function EdtPage() {
               className="hidden sm:block text-xs text-gray-500 hover:text-indigo-600 border border-gray-200 hover:border-indigo-300 rounded-lg px-3 py-1.5 transition-colors font-medium"
             >
               ¿Cómo usar?
+            </button>
+            <button
+              onClick={handleExport}
+              title="Exportar a Excel"
+              className="text-xs text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 hover:border-emerald-300 rounded-lg px-2.5 py-1.5 transition-colors font-medium flex items-center gap-1"
+            >
+              <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span className="hidden sm:inline">Excel</span>
             </button>
             <LangToggle />
             <nav className="hidden sm:flex gap-1">

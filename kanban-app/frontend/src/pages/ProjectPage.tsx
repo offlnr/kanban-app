@@ -15,7 +15,8 @@ import { useToast } from '../contexts/ToastContext'
 import { useConfirm } from '../contexts/ConfirmContext'
 import { ProjectRoleProvider } from '../contexts/ProjectRoleContext'
 import type { NewTaskPayload } from '../components/kanban/kanban.utils'
-import type { Project, KanbanColumn, Task, WorkPackage, TaskPriority } from '../types'
+import type { Project, KanbanColumn, Task, WorkPackage, Phase, TaskPriority } from '../types'
+import { exportProjectToExcel } from '../utils/exportToExcel'
 
 export default function ProjectPage() {
   const { id } = useParams<{ id: string }>()
@@ -26,6 +27,7 @@ export default function ProjectPage() {
   const [columns, setColumns] = useState<KanbanColumn[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [workPackages, setWorkPackages] = useState<WorkPackage[]>([])
+  const [phases, setPhases] = useState<Phase[]>([])
   const [loading, setLoading] = useState(true)
   const [showHelp, setShowHelp] = useState(false)
   const [showPanel, setShowPanel] = useState(() => window.innerWidth >= 1024)
@@ -48,6 +50,7 @@ export default function ProjectPage() {
       setProject(proj)
       setColumns(cols)
       setTasks(tks)
+      setPhases(phs)
       const [wpLists, role, membersData] = await Promise.all([
         Promise.all(phs.map((p) => workPackagesService.list(p.id))),
         projectsService.getMyRole(projectId),
@@ -166,6 +169,24 @@ export default function ProjectPage() {
               className="hidden sm:block text-xs text-gray-500 hover:text-indigo-600 border border-gray-200 hover:border-indigo-300 rounded-lg px-3 py-1.5 transition-colors font-medium"
             >
               {t('nav.how_to_use')}
+            </button>
+            <button
+              onClick={() =>
+                exportProjectToExcel({
+                  projectName: project?.name ?? 'proyecto',
+                  columns,
+                  tasks,
+                  phases,
+                  workPackages,
+                })
+              }
+              title="Exportar a Excel"
+              className="text-xs text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 hover:border-emerald-300 rounded-lg px-2.5 py-1.5 transition-colors font-medium flex items-center gap-1"
+            >
+              <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span className="hidden sm:inline">Excel</span>
             </button>
             <LangToggle />
             <nav className="hidden sm:flex gap-1">
