@@ -135,7 +135,6 @@ export default function SummaryPage() {
   const noDueDateCount  = tasks.filter((t) => !t.due_date).length
 
   // phase breakdown
-  const wpById = new Map(workPackages.map((wp) => [wp.id, wp]))
   const phaseRows: PhaseRow[] = phases
     .slice()
     .sort((a, b) => a.order - b.order)
