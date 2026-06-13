@@ -20,8 +20,17 @@ const ROLE_STYLES: Record<string, string> = {
   viewer: 'bg-gray-100 text-gray-600',
 }
 
-function Avatar({ name }: { name: string }) {
+function Avatar({ name, avatarUrl }: { name: string; avatarUrl?: string | null }) {
   const initials = name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()
+  if (avatarUrl) {
+    return (
+      <img
+        src={avatarUrl}
+        alt={name}
+        className="w-9 h-9 rounded-full object-cover border border-gray-200 shrink-0"
+      />
+    )
+  }
   return (
     <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm font-semibold shrink-0">
       {initials}
@@ -206,7 +215,7 @@ export default function MembersPage() {
             {searchResult && (
               <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-3 gap-3">
                 <div className="flex items-center gap-3">
-                  <Avatar name={searchResult.full_name} />
+                  <Avatar name={searchResult.full_name} avatarUrl={searchResult.avatar_url} />
                   <div>
                     <p className="text-sm font-medium text-gray-900">{searchResult.full_name}</p>
                     <p className="text-xs text-gray-500">{searchResult.email}</p>
@@ -246,7 +255,7 @@ export default function MembersPage() {
             {allMembers.map(({ user, role, isOwner: memberIsOwner, member }) => (
               <li key={user.id} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
-                  <Avatar name={user.full_name} />
+                  <Avatar name={user.full_name} avatarUrl={user.avatar_url} />
                   <div>
                     <p className="text-sm font-medium text-gray-900">{user.full_name}</p>
                     <p className="text-xs text-gray-500">{user.email}</p>
