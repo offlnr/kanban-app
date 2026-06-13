@@ -48,6 +48,7 @@ export default function ProjectPage() {
         phasesService.list(projectId),
       ])
       setProject(proj)
+      document.title = `${proj.name} | KanbanApp`
       setColumns(cols)
       setTasks(tks)
       setPhases(phs)
@@ -62,6 +63,7 @@ export default function ProjectPage() {
       setLoading(false)
     }
     load().catch(() => navigate('/dashboard'))
+    return () => { document.title = 'KanbanApp' }
   }, [projectId])
 
   const handleAddColumn = async (name: string) => {

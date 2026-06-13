@@ -94,7 +94,7 @@ export default function SummaryPage() {
         tasksService.listByProject(projectId),
         phasesService.list(projectId),
       ])
-      setProject(proj); setColumns(cols); setTasks(tks); setPhases(phs)
+      setProject(proj); document.title = `${proj.name} | KanbanApp`; setColumns(cols); setTasks(tks); setPhases(phs)
 
       const [wpLists, membersData] = await Promise.all([
         Promise.all(phs.map((p) => workPackagesService.list(p.id))),
@@ -105,6 +105,7 @@ export default function SummaryPage() {
       setLoading(false)
     }
     load().catch(() => navigate('/dashboard'))
+    return () => { document.title = 'KanbanApp' }
   }, [projectId])
 
   if (loading) {

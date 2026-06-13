@@ -60,10 +60,17 @@ export default function MembersPage() {
   const isOwner = data?.current_user_role === 'owner'
 
   useEffect(() => {
-    projectsService.getMembers(projectId)
-      .then(setData)
+    Promise.all([
+      projectsService.getMembers(projectId),
+      projectsService.get(projectId),
+    ])
+      .then(([membersData, proj]) => {
+        setData(membersData)
+        document.title = `${proj.name} | KanbanApp`
+      })
       .catch(() => navigate('/dashboard'))
       .finally(() => setLoading(false))
+    return () => { document.title = 'KanbanApp' }
   }, [projectId])
 
   const handleSearch = async (e: React.FormEvent) => {

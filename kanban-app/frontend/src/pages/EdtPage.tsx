@@ -101,6 +101,7 @@ export default function EdtPage() {
         tasksService.listByProject(projectId),
       ])
       setProject(proj)
+      document.title = `${proj.name} | KanbanApp`
 
       const phasesWithData = await Promise.all(
         phs.map(async (phase) => {
@@ -120,6 +121,7 @@ export default function EdtPage() {
     }
     projectsService.getMyRole(projectId).then(setUserRole).catch(() => {})
     load().catch(() => navigate('/dashboard'))
+    return () => { document.title = 'KanbanApp' }
   }, [projectId])
 
   const togglePhase = (id: number) => {
