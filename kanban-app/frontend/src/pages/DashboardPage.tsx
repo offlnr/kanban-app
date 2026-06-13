@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../contexts/ToastContext'
@@ -73,7 +73,26 @@ export default function DashboardPage() {
         </div>
         <div className="flex items-center gap-2 sm:gap-4">
           <LangToggle />
-          <span className="text-sm text-gray-600 truncate max-w-32 sm:max-w-none hidden sm:block">{user?.full_name ?? user?.email}</span>
+          <Link to="/profile" className="flex items-center gap-2 group" title={t('dashboard.my_profile')}>
+            {user?.avatar_url ? (
+              <img
+                src={user.avatar_url}
+                alt={user.full_name}
+                className="w-8 h-8 rounded-full object-cover border border-gray-200 group-hover:border-indigo-300 transition-colors"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-indigo-100 group-hover:bg-indigo-200 flex items-center justify-center text-xs font-semibold text-indigo-700 border border-gray-200 group-hover:border-indigo-300 transition-colors select-none">
+                {(user?.full_name ?? user?.email ?? '?')
+                  .split(' ')
+                  .slice(0, 2)
+                  .map((w: string) => w[0]?.toUpperCase() ?? '')
+                  .join('')}
+              </div>
+            )}
+            <span className="text-sm text-gray-600 truncate max-w-32 sm:max-w-none hidden sm:block group-hover:text-indigo-600 transition-colors">
+              {user?.full_name ?? user?.email}
+            </span>
+          </Link>
           <button onClick={logout} className="text-sm text-gray-500 hover:text-gray-700">{t('dashboard.sign_out')}</button>
         </div>
       </header>

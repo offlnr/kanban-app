@@ -8,6 +8,7 @@ import ProjectPage from './pages/ProjectPage'
 import EdtPage from './pages/EdtPage'
 import MembersPage from './pages/MembersPage'
 import SummaryPage from './pages/SummaryPage'
+import ProfilePage from './pages/ProfilePage'
 import type { ReactNode } from 'react'
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/projects/:id/edt" element={<ProtectedRoute><EdtPage /></ProtectedRoute>} />
           <Route path="/projects/:id/members" element={<ProtectedRoute><MembersPage /></ProtectedRoute>} />
               <Route path="/projects/:id/summary" element={<ProtectedRoute><SummaryPage /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </AuthProvider>

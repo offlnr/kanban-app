@@ -7,6 +7,7 @@ interface AuthContextValue {
   token: string | null
   login: (token: string) => Promise<void>
   logout: () => void
+  updateUser: (user: User) => void
   loading: boolean
 }
 
@@ -22,10 +23,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false)
       return
     }
-    api.get<User>('/auth/me').catch(() => {
-      setToken(null)
-      localStorage.removeItem('token')
-    }).finally(() => setLoading(false))
+    api.get<User>('/auth/me')
+      .then(({ data }) => setUser(data))
+      .catch(() => {
+        setToken(null)
+        localStorage.removeItem('token')
+      })
+      .finally(() => setLoading(false))
   }, [token])
 
   const login = async (newToken: string) => {
@@ -43,8 +47,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }
 
+  const updateUser = (updated: User) => setUser(updated)
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateUser, loading }}>
       {children}
     </AuthContext.Provider>
   )
