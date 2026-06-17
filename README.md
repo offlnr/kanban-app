@@ -1,10 +1,6 @@
 <div align="center">
 
-<br />
-
-<img src="https://img.shields.io/badge/KanbanApp-6366f1?style=for-the-badge&logo=trello&logoColor=white" alt="KanbanApp" height="40" />
-
-<br /><br />
+# KanbanApp
 
 **Full-stack project management app with Kanban boards, WBS, and team collaboration.**
 
