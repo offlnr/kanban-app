@@ -11,6 +11,7 @@ import KanbanFilters from '../components/kanban/KanbanFilters'
 import HelpModal from '../components/HelpModal'
 import ProjectStatsPanel from '../components/ProjectStatsPanel'
 import LangToggle from '../components/LangToggle'
+import ThemeToggle from '../components/ThemeToggle'
 import { useToast } from '../contexts/ToastContext'
 import { useConfirm } from '../contexts/ConfirmContext'
 import { ProjectRoleProvider } from '../contexts/ProjectRoleContext'
@@ -132,24 +133,24 @@ export default function ProjectPage() {
   }
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center text-gray-400">{t('project.loading')}</div>
+    return <div className="flex h-screen items-center justify-center text-gray-400 dark:text-gray-500 dark:bg-gray-900">{t('project.loading')}</div>
   }
 
   return (
     <ProjectRoleProvider value={userRole}>
-    <div className="h-screen bg-gray-50 flex flex-col">
+    <div className="h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 shrink-0">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">
         <div className="px-4 sm:px-6 py-3 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button onClick={() => navigate('/dashboard')} className="text-gray-400 hover:text-gray-600 transition-colors shrink-0">
+            <button onClick={() => navigate('/dashboard')} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="font-semibold text-gray-900 truncate">{project?.name}</h1>
+            <h1 className="font-semibold text-gray-900 dark:text-gray-100 truncate">{project?.name}</h1>
             {userRole === 'viewer' && (
-              <span className="hidden sm:inline text-xs bg-amber-100 text-amber-700 font-medium px-2.5 py-1 rounded-full shrink-0">
+              <span className="hidden sm:inline text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 font-medium px-2.5 py-1 rounded-full shrink-0">
                 {t('nav.read_only')}
               </span>
             )}
@@ -159,8 +160,8 @@ export default function ProjectPage() {
               onClick={() => setShowPanel((v) => !v)}
               className={`text-xs border rounded-lg px-2.5 py-1.5 transition-colors font-medium ${
                 showPanel
-                  ? 'text-indigo-600 bg-indigo-50 border-indigo-200 hover:bg-indigo-100'
-                  : 'text-gray-500 hover:text-indigo-600 border-gray-200 hover:border-indigo-300'
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 border-indigo-200 dark:border-indigo-700 hover:bg-indigo-100 dark:hover:bg-indigo-900/60'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600'
               }`}
             >
               <span className="hidden sm:inline">{showPanel ? t('project.hide_info') : t('project.project_info')}</span>
@@ -168,7 +169,7 @@ export default function ProjectPage() {
             </button>
             <button
               onClick={() => setShowHelp(true)}
-              className="hidden sm:block text-xs text-gray-500 hover:text-indigo-600 border border-gray-200 hover:border-indigo-300 rounded-lg px-3 py-1.5 transition-colors font-medium"
+              className="hidden sm:block text-xs text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 rounded-lg px-3 py-1.5 transition-colors font-medium"
             >
               {t('nav.how_to_use')}
             </button>
@@ -183,7 +184,7 @@ export default function ProjectPage() {
                 })
               }
               title="Exportar a Excel"
-              className="text-xs text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 hover:border-emerald-300 rounded-lg px-2.5 py-1.5 transition-colors font-medium flex items-center gap-1"
+              className="text-xs text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-300 dark:hover:border-emerald-700 rounded-lg px-2.5 py-1.5 transition-colors font-medium flex items-center gap-1"
             >
               <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -191,24 +192,25 @@ export default function ProjectPage() {
               <span className="hidden sm:inline">Excel</span>
             </button>
             <LangToggle />
+            <ThemeToggle />
             <nav className="hidden sm:flex gap-1">
-              <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg">{t('nav.kanban')}</span>
-              <Link to={`/projects/${projectId}/edt`}     className="text-sm text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.wbs')}</Link>
-              <Link to={`/projects/${projectId}/members`} className="text-sm text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.members')}</Link>
-              <Link to={`/projects/${projectId}/summary`} className="text-sm text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.summary')}</Link>
+              <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-3 py-1.5 rounded-lg">{t('nav.kanban')}</span>
+              <Link to={`/projects/${projectId}/edt`}     className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.wbs')}</Link>
+              <Link to={`/projects/${projectId}/members`} className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.members')}</Link>
+              <Link to={`/projects/${projectId}/summary`} className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.summary')}</Link>
             </nav>
           </div>
         </div>
         {/* Mobile nav row */}
         <nav className="flex sm:hidden items-center gap-1 px-4 pb-2">
-          <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1.5 rounded-lg">{t('nav.kanban')}</span>
-          <Link to={`/projects/${projectId}/edt`}     className="text-xs text-gray-500 hover:text-gray-700 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.wbs')}</Link>
-          <Link to={`/projects/${projectId}/members`} className="text-xs text-gray-500 hover:text-gray-700 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.members')}</Link>
-          <Link to={`/projects/${projectId}/summary`} className="text-xs text-gray-500 hover:text-gray-700 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.summary')}</Link>
+          <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-2.5 py-1.5 rounded-lg">{t('nav.kanban')}</span>
+          <Link to={`/projects/${projectId}/edt`}     className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.wbs')}</Link>
+          <Link to={`/projects/${projectId}/members`} className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.members')}</Link>
+          <Link to={`/projects/${projectId}/summary`} className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.summary')}</Link>
           {userRole === 'viewer' && (
-            <span className="ml-auto text-xs bg-amber-100 text-amber-700 font-medium px-2 py-1 rounded-full">{t('nav.read_only')}</span>
+            <span className="ml-auto text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 font-medium px-2 py-1 rounded-full">{t('nav.read_only')}</span>
           )}
-          <button onClick={() => setShowHelp(true)} className="ml-auto text-xs text-gray-500 border border-gray-200 rounded-lg px-2.5 py-1 transition-colors">
+          <button onClick={() => setShowHelp(true)} className="ml-auto text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-lg px-2.5 py-1 transition-colors">
             {t('nav.how_to_use')}
           </button>
         </nav>
@@ -216,7 +218,7 @@ export default function ProjectPage() {
 
       {/* Viewer banner */}
       {userRole === 'viewer' && (
-        <div className="bg-amber-50 border-b border-amber-200 px-6 py-2.5 flex items-center gap-2 text-sm text-amber-800">
+        <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-6 py-2.5 flex items-center gap-2 text-sm text-amber-800 dark:text-amber-300">
           <span>👁</span>
           <span dangerouslySetInnerHTML={{ __html: t('project.viewer_banner') }} />
         </div>
@@ -226,9 +228,9 @@ export default function ProjectPage() {
       <div className="flex-1 flex overflow-hidden">
         <div className="flex-1 overflow-auto p-6">
           {columns.length === 0 && userRole !== 'viewer' && (
-            <div className="text-center text-gray-400 text-sm mb-6">
+            <div className="text-center text-gray-400 dark:text-gray-500 text-sm mb-6">
               <span dangerouslySetInnerHTML={{ __html: t('project.no_columns_msg') }} />
-              {' '}{t('project.no_columns_guide')} <button onClick={() => setShowHelp(true)} className="text-indigo-500 hover:underline">{t('project.view_guide')}</button>.
+              {' '}{t('project.no_columns_guide')} <button onClick={() => setShowHelp(true)} className="text-indigo-500 dark:text-indigo-400 hover:underline">{t('project.view_guide')}</button>.
             </div>
           )}
 

@@ -13,7 +13,7 @@ export default function LangToggle({ className = '' }: { className?: string }) {
   return (
     <button
       onClick={toggle}
-      className={`text-xs font-semibold border rounded-lg px-2.5 py-1.5 transition-colors text-gray-500 hover:text-indigo-600 border-gray-200 hover:border-indigo-300 ${className}`}
+      className={`text-xs font-semibold border rounded-lg px-2.5 py-1.5 transition-colors text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 ${className}`}
       title={isEN ? 'Cambiar a español' : 'Switch to English'}
     >
       {isEN ? 'ES' : 'EN'}

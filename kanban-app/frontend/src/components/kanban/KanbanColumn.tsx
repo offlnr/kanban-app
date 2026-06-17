@@ -58,7 +58,6 @@ export default function KanbanColumn({
   const nameInputRef = useRef<HTMLInputElement>(null)
   const colorPickerRef = useRef<HTMLDivElement>(null)
 
-  // Close color picker on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (colorPickerRef.current && !colorPickerRef.current.contains(e.target as Node)) {
@@ -129,6 +128,8 @@ export default function KanbanColumn({
 
   const accentColor = column.color ?? null
 
+  const inputCls = "w-full text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+
   return (
     <div className="flex flex-col w-72 shrink-0">
       {/* Color accent bar */}
@@ -145,12 +146,12 @@ export default function KanbanColumn({
             onChange={(e) => setNameValue(e.target.value)}
             onBlur={saveColumnName}
             onKeyDown={handleNameKeyDown}
-            className="flex-1 text-sm font-medium text-gray-700 border border-indigo-300 rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="flex-1 text-sm font-medium text-gray-700 dark:text-gray-300 border border-indigo-300 dark:border-indigo-600 rounded px-2 py-0.5 bg-white dark:bg-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
           />
         ) : (
           <h3
             onClick={canEdit ? startEditName : undefined}
-            className={`font-medium text-sm truncate ${canEdit ? 'cursor-pointer hover:text-indigo-600 transition-colors' : 'cursor-default'}`}
+            className={`font-medium text-sm truncate ${canEdit ? 'cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors' : 'cursor-default text-gray-700 dark:text-gray-300'}`}
             style={{ color: accentColor ?? undefined }}
             title={canEdit ? t('kanban_board.rename_column') : undefined}
           >
@@ -159,15 +160,14 @@ export default function KanbanColumn({
         )}
 
         <div className="flex items-center gap-1 shrink-0">
-          <span className="text-xs text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">{tasks.length}</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-0.5">{tasks.length}</span>
 
-          {/* Move arrows + color picker + delete — editor/owner only */}
           {canEdit && (
             <>
               {onMoveLeft && (
                 <button
                   onClick={onMoveLeft}
-                  className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all p-0.5 rounded text-gray-400 hover:text-indigo-600 text-xs"
+                  className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all p-0.5 rounded text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 text-xs"
                   title={t('kanban_board.move_left')}
                 >
                   ←
@@ -176,7 +176,7 @@ export default function KanbanColumn({
               {onMoveRight && (
                 <button
                   onClick={onMoveRight}
-                  className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all p-0.5 rounded text-gray-400 hover:text-indigo-600 text-xs"
+                  className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all p-0.5 rounded text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 text-xs"
                   title={t('kanban_board.move_right')}
                 >
                   →
@@ -193,20 +193,20 @@ export default function KanbanColumn({
                   title={t('kanban_board.column_color')}
                 >
                   <span
-                    className="inline-block w-3.5 h-3.5 rounded-full border border-gray-300"
+                    className="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 dark:border-gray-600"
                     style={{ background: accentColor ?? '#e5e7eb' }}
                   />
                 </button>
 
                 {showColorPicker && (
-                  <div className="absolute right-0 top-7 z-20 bg-white border border-gray-200 rounded-xl shadow-lg p-2.5 flex flex-wrap gap-1.5 w-36">
+                  <div className="absolute right-0 top-7 z-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-2.5 flex flex-wrap gap-1.5 w-36">
                     {COLORS.map((c) => (
                       <button
                         key={String(c.value)}
                         onClick={() => handleColorSelect(c.value)}
                         title={c.label}
                         className={`w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 ${
-                          column.color === c.value ? 'border-gray-800 scale-110' : 'border-transparent'
+                          column.color === c.value ? 'border-gray-800 dark:border-gray-200 scale-110' : 'border-transparent'
                         }`}
                         style={{ background: c.bg }}
                       />
@@ -217,7 +217,7 @@ export default function KanbanColumn({
 
               <button
                 onClick={handleDeleteColumn}
-                className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-all text-xs p-0.5 rounded"
+                className="opacity-0 group-hover:opacity-100 text-gray-300 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 transition-all text-xs p-0.5 rounded"
                 title={t('kanban_board.delete_column')}
               >
                 ✕
@@ -231,7 +231,7 @@ export default function KanbanColumn({
       <div
         ref={setNodeRef}
         className={`flex-1 rounded-xl p-2 min-h-32 transition-colors ${
-          isOver ? 'bg-indigo-50 border-2 border-indigo-200' : 'bg-gray-100'
+          isOver ? 'bg-indigo-50 dark:bg-indigo-950/50 border-2 border-indigo-200 dark:border-indigo-700' : 'bg-gray-100 dark:bg-gray-700/60'
         }`}
       >
         <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
@@ -248,9 +248,9 @@ export default function KanbanColumn({
         </SortableContext>
 
         {adding ? (
-          <form onSubmit={handleAdd} className="mt-2 bg-white border border-gray-200 rounded-xl p-3 space-y-2 shadow-sm">
+          <form onSubmit={handleAdd} className="mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 space-y-2 shadow-sm">
             {workPackages.length === 0 ? (
-              <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-2 py-2"
+              <p className="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded-lg px-2 py-2"
                 dangerouslySetInnerHTML={{ __html: t('kanban_column.no_wp_msg') }}
               />
             ) : (
@@ -260,7 +260,7 @@ export default function KanbanColumn({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder={t('kanban_column.task_title')}
-                  className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={inputCls}
                   required
                 />
                 <textarea
@@ -268,13 +268,13 @@ export default function KanbanColumn({
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder={t('kanban_column.description')}
                   rows={2}
-                  className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                  className={`${inputCls} resize-none`}
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value as TaskPriority)}
-                    className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className={inputCls}
                   >
                     <option value="low">{t('priority.low')}</option>
                     <option value="medium">{t('priority.medium')}</option>
@@ -288,22 +288,22 @@ export default function KanbanColumn({
                     value={hours}
                     onChange={(e) => setHours(e.target.value)}
                     placeholder={t('kanban_column.hours')}
-                    className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className={inputCls}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">{t('kanban_column.due_date')}</label>
+                  <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">{t('kanban_column.due_date')}</label>
                   <input
                     type="date"
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
-                    className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className={inputCls}
                   />
                 </div>
                 <select
                   value={wpId}
                   onChange={(e) => setWpId(Number(e.target.value))}
-                  className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={inputCls}
                   required
                 >
                   <option value="">{t('kanban_column.work_package')}</option>
@@ -324,7 +324,7 @@ export default function KanbanColumn({
               <button
                 type="button"
                 onClick={() => { resetForm(); setAdding(false) }}
-                className="text-xs text-gray-400 hover:text-gray-600 px-2"
+                className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 px-2"
               >
                 ✕
               </button>
@@ -333,7 +333,7 @@ export default function KanbanColumn({
         ) : canEdit ? (
           <button
             onClick={() => setAdding(true)}
-            className="mt-2 w-full text-xs text-gray-400 hover:text-gray-600 py-1.5 rounded-lg hover:bg-gray-200 transition-colors text-left px-2"
+            className="mt-2 w-full text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 py-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600/50 transition-colors text-left px-2"
           >
             {t('kanban_column.add_task')}
           </button>

@@ -38,25 +38,25 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
           onClick={() => respond(false)}
         >
           <div
-            className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-sm p-6"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Icon */}
-            <div className={`w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4 ${state.danger ? 'bg-red-100' : 'bg-amber-100'}`}>
-              <span className={`text-xl ${state.danger ? 'text-red-600' : 'text-amber-600'}`}>
+            <div className={`w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4 ${state.danger ? 'bg-red-100 dark:bg-red-950/50' : 'bg-amber-100 dark:bg-amber-950/50'}`}>
+              <span className={`text-xl ${state.danger ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`}>
                 {state.danger ? '🗑' : '⚠'}
               </span>
             </div>
 
             {state.title && (
-              <h3 className="text-center font-semibold text-gray-900 mb-1">{state.title}</h3>
+              <h3 className="text-center font-semibold text-gray-900 dark:text-gray-100 mb-1">{state.title}</h3>
             )}
-            <p className="text-center text-sm text-gray-500 mb-6">{state.message}</p>
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">{state.message}</p>
 
             <div className="flex gap-3">
               <button
                 onClick={() => respond(false)}
-                className="flex-1 border border-gray-200 text-gray-700 font-medium rounded-xl py-2.5 text-sm hover:bg-gray-50 transition-colors"
+                className="flex-1 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-xl py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 Cancelar
               </button>

@@ -47,44 +47,46 @@ export default function TaskEditModal({ task, onSave, onClose }: Props) {
     }
   }
 
+  const inputCls = "w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-semibold text-gray-900">{t('task_edit.title')}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
+          <h2 className="font-semibold text-gray-900 dark:text-gray-100">{t('task_edit.title')}</h2>
+          <button onClick={onClose} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 text-lg leading-none">✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">{t('task_edit.field_title')}</label>
+            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('task_edit.field_title')}</label>
             <input
               autoFocus
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={inputCls}
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">{t('task_edit.field_description')}</label>
+            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('task_edit.field_description')}</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              className={`${inputCls} resize-none`}
               placeholder={t('task_edit.desc_placeholder')}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">{t('task_edit.field_priority')}</label>
+              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('task_edit.field_priority')}</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as TaskPriority)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={inputCls}
               >
                 {PRIORITIES.map((p) => (
                   <option key={p.value} value={p.value}>{p.label}</option>
@@ -92,26 +94,26 @@ export default function TaskEditModal({ task, onSave, onClose }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">{t('task_edit.field_hours')}</label>
+              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('task_edit.field_hours')}</label>
               <input
                 type="number"
                 min="0"
                 step="0.5"
                 value={hours}
                 onChange={(e) => setHours(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={inputCls}
                 placeholder={t('task_edit.hours_placeholder')}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">{t('task_edit.field_due_date')}</label>
+            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{t('task_edit.field_due_date')}</label>
             <input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={inputCls}
             />
           </div>
 
@@ -123,7 +125,7 @@ export default function TaskEditModal({ task, onSave, onClose }: Props) {
             >
               {saving ? t('common.saving') : t('task_edit.save_btn')}
             </button>
-            <button type="button" onClick={onClose} className="px-4 text-sm text-gray-500 hover:text-gray-700">
+            <button type="button" onClick={onClose} className="px-4 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
               {t('common.cancel')}
             </button>
           </div>

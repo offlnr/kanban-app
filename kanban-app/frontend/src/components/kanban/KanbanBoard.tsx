@@ -55,7 +55,6 @@ export default function KanbanBoard({
   const [addingCol, setAddingCol] = useState(false)
   const [colName, setColName] = useState('')
 
-  // Track the original column before drag starts — used to revert on cancel/error
   const originalColumnId = useRef<number | null>(null)
   const tasksRef = useRef(tasks)
   tasksRef.current = tasks
@@ -69,7 +68,6 @@ export default function KanbanBoard({
     if (!over) return null
     const overId = String(over.id)
     if (isColId(overId)) return parseColId(overId)
-    // over is a task — find its current column
     const overTask = tasksRef.current.find((t) => t.id === Number(over.id))
     return overTask?.column_id ?? null
   }, [])
@@ -81,7 +79,6 @@ export default function KanbanBoard({
     originalColumnId.current = task.column_id
   }
 
-  // Move task visually in real-time as user drags over columns/tasks
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     const targetColId = getTargetColumn(over)
     if (targetColId === null) return
@@ -112,11 +109,9 @@ export default function KanbanBoard({
       return
     }
 
-    // Persist to API
     try {
       await tasksService.update(dragged.id, { column_id: newColumnId })
     } catch {
-      // Revert on error
       onTasksChange(
         tasksRef.current.map((t) =>
           t.id === dragged.id ? { ...t, column_id: originalColumnId.current! } : t
@@ -130,7 +125,6 @@ export default function KanbanBoard({
 
   const handleDragCancel = ({ active }: DragCancelEvent) => {
     setActiveTask(null)
-    // Snap back to original column
     if (originalColumnId.current !== null) {
       onTasksChange(
         tasksRef.current.map((t) =>
@@ -221,20 +215,20 @@ export default function KanbanBoard({
         {canEdit && (
           <div className="w-72 shrink-0">
             {addingCol ? (
-              <form onSubmit={handleAddColumn} className="bg-gray-100 rounded-xl p-3 space-y-2">
+              <form onSubmit={handleAddColumn} className="bg-gray-100 dark:bg-gray-700 rounded-xl p-3 space-y-2">
                 <input
                   autoFocus
                   value={colName}
                   onChange={(e) => setColName(e.target.value)}
                   placeholder={t('kanban_board.column_name_placeholder')}
-                  className="w-full text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1.5 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   required
                 />
                 <div className="flex gap-1">
                   <button type="submit" className="flex-1 bg-indigo-600 text-white text-xs font-medium rounded-lg py-1.5 hover:bg-indigo-700">
                     {t('kanban_board.add_btn')}
                   </button>
-                  <button type="button" onClick={() => setAddingCol(false)} className="text-xs text-gray-500 px-2 hover:text-gray-700">
+                  <button type="button" onClick={() => setAddingCol(false)} className="text-xs text-gray-500 dark:text-gray-400 px-2 hover:text-gray-700 dark:hover:text-gray-200">
                     ✕
                   </button>
                 </div>
@@ -242,7 +236,7 @@ export default function KanbanBoard({
             ) : (
               <button
                 onClick={() => setAddingCol(true)}
-                className="w-full text-sm text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl py-3 px-4 text-left transition-colors"
+                className="w-full text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 bg-gray-100 dark:bg-gray-700/60 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl py-3 px-4 text-left transition-colors"
               >
                 {t('kanban_board.add_column')}
               </button>

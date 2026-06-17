@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import HelpModal from '../components/HelpModal'
 import LangToggle from '../components/LangToggle'
+import ThemeToggle from '../components/ThemeToggle'
 import { useToast } from '../contexts/ToastContext'
 import { useConfirm } from '../contexts/ConfirmContext'
 import { ProjectRoleProvider } from '../contexts/ProjectRoleContext'
@@ -51,7 +52,7 @@ function InlineForm({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
-        className="flex-1 text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         required
       />
       <button
@@ -64,7 +65,7 @@ function InlineForm({
       <button
         type="button"
         onClick={onCancel}
-        className="text-xs text-gray-400 hover:text-gray-600 px-2"
+        className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 px-2"
       >
         ✕
       </button>
@@ -251,24 +252,24 @@ export default function EdtPage() {
     tasks.reduce((acc, t) => acc + (t.estimated_hours ?? 0), 0)
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center text-gray-400">{t('edt.loading')}</div>
+    return <div className="flex h-screen items-center justify-center text-gray-400 dark:text-gray-500 dark:bg-gray-900">{t('edt.loading')}</div>
   }
 
   return (
     <ProjectRoleProvider value={userRole}>
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 shrink-0">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">
         <div className="px-4 sm:px-6 py-3 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button onClick={() => navigate('/dashboard')} className="text-gray-400 hover:text-gray-600 shrink-0">
+            <button onClick={() => navigate('/dashboard')} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 shrink-0">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="font-semibold text-gray-900 truncate">{project?.name}</h1>
+            <h1 className="font-semibold text-gray-900 dark:text-gray-100 truncate">{project?.name}</h1>
             {!canEdit && (
-              <span className="hidden sm:inline text-xs bg-amber-100 text-amber-700 font-medium px-2.5 py-1 rounded-full shrink-0">
+              <span className="hidden sm:inline text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 font-medium px-2.5 py-1 rounded-full shrink-0">
                 Solo lectura
               </span>
             )}
@@ -276,14 +277,14 @@ export default function EdtPage() {
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <button
               onClick={() => setShowHelp(true)}
-              className="hidden sm:block text-xs text-gray-500 hover:text-indigo-600 border border-gray-200 hover:border-indigo-300 rounded-lg px-3 py-1.5 transition-colors font-medium"
+              className="hidden sm:block text-xs text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 rounded-lg px-3 py-1.5 transition-colors font-medium"
             >
               ¿Cómo usar?
             </button>
             <button
               onClick={handleExport}
               title="Exportar a Excel"
-              className="text-xs text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 hover:border-emerald-300 rounded-lg px-2.5 py-1.5 transition-colors font-medium flex items-center gap-1"
+              className="text-xs text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-300 dark:hover:border-emerald-700 rounded-lg px-2.5 py-1.5 transition-colors font-medium flex items-center gap-1"
             >
               <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -291,31 +292,32 @@ export default function EdtPage() {
               <span className="hidden sm:inline">Excel</span>
             </button>
             <LangToggle />
+            <ThemeToggle />
             <nav className="hidden sm:flex gap-1">
-              <Link to={`/projects/${projectId}`}         className="text-sm text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.kanban')}</Link>
-              <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg">{t('nav.wbs')}</span>
-              <Link to={`/projects/${projectId}/members`} className="text-sm text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.members')}</Link>
-              <Link to={`/projects/${projectId}/summary`} className="text-sm text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.summary')}</Link>
+              <Link to={`/projects/${projectId}`}         className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.kanban')}</Link>
+              <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-3 py-1.5 rounded-lg">{t('nav.wbs')}</span>
+              <Link to={`/projects/${projectId}/members`} className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.members')}</Link>
+              <Link to={`/projects/${projectId}/summary`} className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.summary')}</Link>
             </nav>
           </div>
         </div>
         <nav className="flex sm:hidden items-center gap-1 px-4 pb-2">
-          <Link to={`/projects/${projectId}`}         className="text-xs text-gray-500 hover:text-gray-700 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.kanban')}</Link>
-          <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1.5 rounded-lg">{t('nav.wbs')}</span>
-          <Link to={`/projects/${projectId}/members`} className="text-xs text-gray-500 hover:text-gray-700 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.members')}</Link>
-          <Link to={`/projects/${projectId}/summary`} className="text-xs text-gray-500 hover:text-gray-700 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">{t('nav.summary')}</Link>
+          <Link to={`/projects/${projectId}`}         className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.kanban')}</Link>
+          <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-2.5 py-1.5 rounded-lg">{t('nav.wbs')}</span>
+          <Link to={`/projects/${projectId}/members`} className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.members')}</Link>
+          <Link to={`/projects/${projectId}/summary`} className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">{t('nav.summary')}</Link>
           {!canEdit && (
-            <span className="ml-auto text-xs bg-amber-100 text-amber-700 font-medium px-2 py-1 rounded-full">{t('nav.read_only')}</span>
+            <span className="ml-auto text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 font-medium px-2 py-1 rounded-full">{t('nav.read_only')}</span>
           )}
-          <button onClick={() => setShowHelp(true)} className="ml-auto text-xs text-gray-500 border border-gray-200 rounded-lg px-2.5 py-1">
+          <button onClick={() => setShowHelp(true)} className="ml-auto text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-lg px-2.5 py-1">
             {t('nav.how_to_use')}
           </button>
         </nav>
       </header>
 
-      {/* EDT tree */}
+      {/* Viewer banner */}
       {!canEdit && (
-        <div className="bg-amber-50 border-b border-amber-200 px-6 py-2.5 flex items-center gap-2 text-sm text-amber-800">
+        <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-6 py-2.5 flex items-center gap-2 text-sm text-amber-800 dark:text-amber-300">
           <span>👁</span>
           <span dangerouslySetInnerHTML={{ __html: t('edt.viewer_banner') }} />
         </div>
@@ -324,13 +326,12 @@ export default function EdtPage() {
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">{t('edt.title')}</h2>
-            <p className="text-sm text-gray-500">{t('edt.subtitle')}</p>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t('edt.title')}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t('edt.subtitle')}</p>
           </div>
           {canEdit && !addingPhase && (
             <button
               onClick={() => setAddingPhase(true)}
-              style={{ background: '#4f46e5', color: '#fff', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 500 }}
               className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
             >
               {t('edt.new_phase')}
@@ -340,8 +341,8 @@ export default function EdtPage() {
 
         {/* New phase form */}
         {addingPhase && (
-          <div className="bg-white border border-indigo-200 rounded-xl p-4 mb-4 shadow-sm">
-            <p className="text-xs text-gray-500 mb-2 font-medium">{t('edt.new_phase_label')}</p>
+          <div className="bg-white dark:bg-gray-800 border border-indigo-200 dark:border-indigo-700 rounded-xl p-4 mb-4 shadow-sm">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">{t('edt.new_phase_label')}</p>
             <InlineForm
               placeholder={t('edt.phase_placeholder')}
               onSave={handleAddPhase}
@@ -351,17 +352,16 @@ export default function EdtPage() {
         )}
 
         {phases.length === 0 && !addingPhase ? (
-          <div className="text-center py-16 border-2 border-dashed border-gray-200 rounded-xl bg-white">
-            <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+          <div className="text-center py-16 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800">
+            <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-950 rounded-xl flex items-center justify-center mx-auto mb-4">
               <svg className="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
             </div>
-            <p className="text-gray-700 font-medium mb-1">{t('edt.no_phases_title')}</p>
-            <p className="text-gray-400 text-sm mb-5">{t('edt.no_phases_desc')}</p>
+            <p className="text-gray-700 dark:text-gray-300 font-medium mb-1">{t('edt.no_phases_title')}</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm mb-5">{t('edt.no_phases_desc')}</p>
             <button
               onClick={() => setAddingPhase(true)}
-              style={{ background: '#4f46e5', color: '#fff', padding: '10px 20px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: '14px' }}
               className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
             >
               {t('edt.create_first')}
@@ -375,11 +375,11 @@ export default function EdtPage() {
               const expanded = expandedPhases.has(phase.id)
 
               return (
-                <div key={phase.id} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div key={phase.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
                   {/* Phase header */}
-                  <div className="group flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors">
+                  <div className="group flex items-center justify-between px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <button onClick={() => togglePhase(phase.id)} className="text-gray-400 text-xs shrink-0">
+                      <button onClick={() => togglePhase(phase.id)} className="text-gray-400 dark:text-gray-500 text-xs shrink-0">
                         {expanded ? '▾' : '▸'}
                       </button>
                       {editingPhaseId === phase.id ? (
@@ -389,29 +389,29 @@ export default function EdtPage() {
                           onChange={(e) => setEditNameValue(e.target.value)}
                           onBlur={() => saveEditPhase(phase.id)}
                           onKeyDown={(e) => { if (e.key === 'Enter') saveEditPhase(phase.id); if (e.key === 'Escape') setEditingPhaseId(null) }}
-                          className="flex-1 text-sm font-medium border border-indigo-300 rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          className="flex-1 text-sm font-medium border border-indigo-300 dark:border-indigo-600 rounded px-2 py-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                         />
                       ) : (
                         <button onClick={() => togglePhase(phase.id)} className="text-left min-w-0">
-                          <p className="font-medium text-gray-900 truncate">{phase.name}</p>
-                          {phase.description && <p className="text-xs text-gray-400 mt-0.5 truncate">{phase.description}</p>}
+                          <p className="font-medium text-gray-900 dark:text-gray-100 truncate">{phase.name}</p>
+                          {phase.description && <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">{phase.description}</p>}
                         </button>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-400 shrink-0 ml-3">
+                    <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 shrink-0 ml-3">
                       <span className="hidden sm:inline">{t('edt.packages_count', { count: phase.workPackages.length })}</span>
                       <span>{phaseHours > 0 ? `${phaseHours}h` : '—'}</span>
                       {canEdit && <>
                         <button
                           onClick={() => startEditPhase(phase)}
-                          className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-gray-300 hover:text-indigo-500 transition-all text-xs p-1 rounded"
+                          className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-gray-300 dark:text-gray-600 hover:text-indigo-500 dark:hover:text-indigo-400 transition-all text-xs p-1 rounded"
                           title={t('edt.rename_phase')}
                         >
                           ✎
                         </button>
                         <button
                           onClick={() => handleDeletePhase(phase.id, phase.name)}
-                          className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-all text-xs p-1 rounded"
+                          className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-gray-300 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 transition-all text-xs p-1 rounded"
                           title={t('edt.delete_phase')}
                         >
                           ✕
@@ -422,12 +422,12 @@ export default function EdtPage() {
 
                   {/* Work packages */}
                   {expanded && (
-                    <div className="border-t border-gray-100">
+                    <div className="border-t border-gray-100 dark:border-gray-700">
                       {phase.workPackages.map((wp) => {
                         const wpHours = totalHours(wp.tasks)
                         return (
-                          <div key={wp.id} className="border-b border-gray-100 last:border-0">
-                            <div className="group flex items-center justify-between px-5 py-2.5 pl-8 sm:pl-12 bg-gray-50">
+                          <div key={wp.id} className="border-b border-gray-100 dark:border-gray-700 last:border-0">
+                            <div className="group flex items-center justify-between px-5 py-2.5 pl-8 sm:pl-12 bg-gray-50 dark:bg-gray-700/40">
                               <div className="flex-1 min-w-0 mr-3">
                                 {editingWpId === wp.id ? (
                                   <input
@@ -436,31 +436,31 @@ export default function EdtPage() {
                                     onChange={(e) => setEditNameValue(e.target.value)}
                                     onBlur={() => saveEditWp(phase.id, wp.id)}
                                     onKeyDown={(e) => { if (e.key === 'Enter') saveEditWp(phase.id, wp.id); if (e.key === 'Escape') setEditingWpId(null) }}
-                                    className="w-full text-sm font-medium border border-indigo-300 rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                    className="w-full text-sm font-medium border border-indigo-300 dark:border-indigo-600 rounded px-2 py-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                                   />
                                 ) : (
                                   <>
-                                    <p className="text-sm font-medium text-gray-700 truncate">{wp.name}</p>
+                                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">{wp.name}</p>
                                     {wp.acceptance_criteria && (
-                                      <p className="text-xs text-gray-400 mt-0.5 truncate">✓ {wp.acceptance_criteria}</p>
+                                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">✓ {wp.acceptance_criteria}</p>
                                     )}
                                   </>
                                 )}
                               </div>
-                              <div className="flex items-center gap-2 text-xs text-gray-400 shrink-0">
+                              <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500 shrink-0">
                                 <span>{t('edt.tasks_count', { count: wp.tasks.length })}</span>
                                 <span>{wpHours > 0 ? `${wpHours}h` : '—'}</span>
                                 {canEdit && <>
                                   <button
                                     onClick={() => startEditWp(wp)}
-                                    className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-gray-300 hover:text-indigo-500 transition-all p-1 rounded"
+                                    className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-gray-300 dark:text-gray-600 hover:text-indigo-500 dark:hover:text-indigo-400 transition-all p-1 rounded"
                                     title={t('edt.rename_wp')}
                                   >
                                     ✎
                                   </button>
                                   <button
                                     onClick={() => handleDeleteWorkPackage(phase.id, wp.id, wp.name)}
-                                    className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-all p-1 rounded"
+                                    className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-gray-300 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 transition-all p-1 rounded"
                                     title={t('edt.delete_wp')}
                                   >
                                     ✕
@@ -471,9 +471,9 @@ export default function EdtPage() {
                             {wp.tasks.length > 0 && (
                               <div className="pl-14 sm:pl-20 pr-5 py-2 space-y-1">
                                 {wp.tasks.map((task) => (
-                                  <div key={task.id} className="flex items-center justify-between text-xs text-gray-500 py-0.5">
+                                  <div key={task.id} className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 py-0.5">
                                     <span className="truncate">{task.title}</span>
-                                    <span className="ml-4 text-gray-400 shrink-0">
+                                    <span className="ml-4 text-gray-400 dark:text-gray-500 shrink-0">
                                       {task.estimated_hours != null ? `${task.estimated_hours}h` : '—'}
                                     </span>
                                   </div>
@@ -486,7 +486,7 @@ export default function EdtPage() {
 
                       {/* Add work package */}
                       {canEdit && (
-                        <div className="px-5 py-3 pl-8 sm:pl-12 bg-gray-50 border-t border-gray-100">
+                        <div className="px-5 py-3 pl-8 sm:pl-12 bg-gray-50 dark:bg-gray-700/40 border-t border-gray-100 dark:border-gray-700">
                           {addingWpForPhase === phase.id ? (
                             <InlineForm
                               placeholder="Nombre del paquete de trabajo"
@@ -496,7 +496,7 @@ export default function EdtPage() {
                           ) : (
                             <button
                               onClick={() => setAddingWpForPhase(phase.id)}
-                              className="text-xs text-indigo-500 hover:text-indigo-700 font-medium transition-colors"
+                              className="text-xs text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium transition-colors"
                             >
                               {t('edt.add_wp')}
                             </button>
