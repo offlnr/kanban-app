@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ToastProvider } from './contexts/ToastContext'
 import { ConfirmProvider } from './contexts/ConfirmContext'
 import { ThemeProvider } from './contexts/ThemeContext'
+import PageLoader from './components/PageLoader'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import ProjectPage from './pages/ProjectPage'
@@ -14,7 +15,7 @@ import type { ReactNode } from 'react'
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { token, loading } = useAuth()
-  if (loading) return <div className="flex h-screen items-center justify-center text-gray-400 dark:text-gray-500 dark:bg-gray-900">Cargando...</div>
+  if (loading) return <PageLoader />
   return token ? <>{children}</> : <Navigate to="/login" replace />
 }
 

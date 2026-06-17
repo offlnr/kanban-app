@@ -8,6 +8,7 @@ import { phasesService } from '../services/phases.service'
 import { workPackagesService } from '../services/workPackages.service'
 import LangToggle from '../components/LangToggle'
 import ThemeToggle from '../components/ThemeToggle'
+import PageLoader from '../components/PageLoader'
 import type { Project, KanbanColumn, Task, WorkPackage, Phase } from '../types'
 
 function Ring({ pct }: { pct: number }) {
@@ -106,7 +107,7 @@ export default function SummaryPage() {
   }, [projectId])
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center text-gray-400 dark:text-gray-500 dark:bg-gray-900">{t('summary.loading')}</div>
+    return <PageLoader />
   }
 
   const sortedCols  = [...columns].sort((a, b) => a.order - b.order)

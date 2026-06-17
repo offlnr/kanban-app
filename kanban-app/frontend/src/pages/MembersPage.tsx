@@ -7,6 +7,7 @@ import { useToast } from '../contexts/ToastContext'
 import { useConfirm } from '../contexts/ConfirmContext'
 import LangToggle from '../components/LangToggle'
 import ThemeToggle from '../components/ThemeToggle'
+import PageLoader from '../components/PageLoader'
 import type { ProjectMembersData, MemberWithUser, MemberRole, User } from '../types'
 
 const ROLE_LABELS_KEYS: Record<string, string> = {
@@ -147,7 +148,7 @@ export default function MembersPage() {
     }
   }
 
-  if (loading) return <div className="flex h-screen items-center justify-center text-gray-400 dark:text-gray-500 dark:bg-gray-900">{t('members.loading')}</div>
+  if (loading) return <PageLoader />
 
   type MemberRow = { user: User; role: string; isOwner: boolean; member: MemberWithUser | undefined }
   const ROLE_ORDER: Record<string, number> = { owner: 0, editor: 1, viewer: 2 }

@@ -12,6 +12,7 @@ import HelpModal from '../components/HelpModal'
 import ProjectStatsPanel from '../components/ProjectStatsPanel'
 import LangToggle from '../components/LangToggle'
 import ThemeToggle from '../components/ThemeToggle'
+import PageLoader from '../components/PageLoader'
 import { useToast } from '../contexts/ToastContext'
 import { useConfirm } from '../contexts/ConfirmContext'
 import { ProjectRoleProvider } from '../contexts/ProjectRoleContext'
@@ -133,7 +134,7 @@ export default function ProjectPage() {
   }
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center text-gray-400 dark:text-gray-500 dark:bg-gray-900">{t('project.loading')}</div>
+    return <PageLoader />
   }
 
   return (

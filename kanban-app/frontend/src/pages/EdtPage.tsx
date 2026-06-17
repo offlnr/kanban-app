@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import HelpModal from '../components/HelpModal'
 import LangToggle from '../components/LangToggle'
 import ThemeToggle from '../components/ThemeToggle'
+import PageLoader from '../components/PageLoader'
 import { useToast } from '../contexts/ToastContext'
 import { useConfirm } from '../contexts/ConfirmContext'
 import { ProjectRoleProvider } from '../contexts/ProjectRoleContext'
@@ -252,7 +253,7 @@ export default function EdtPage() {
     tasks.reduce((acc, t) => acc + (t.estimated_hours ?? 0), 0)
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center text-gray-400 dark:text-gray-500 dark:bg-gray-900">{t('edt.loading')}</div>
+    return <PageLoader />
   }
 
   return (

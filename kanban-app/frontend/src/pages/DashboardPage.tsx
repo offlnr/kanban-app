@@ -141,7 +141,20 @@ export default function DashboardPage() {
 
         {/* Project grid */}
         {loading ? (
-          <p className="text-gray-400 dark:text-gray-500 text-sm">{t('dashboard.loading')}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={i}
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 animate-pulse"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-lg mb-3" />
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-3/4 mb-2" />
+                <div className="h-3 bg-gray-100 dark:bg-gray-700/60 rounded-md w-1/2 mb-1" />
+                <div className="h-3 bg-gray-100 dark:bg-gray-700/60 rounded-md w-2/3 mt-3" />
+              </div>
+            ))}
+          </div>
         ) : projects.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-gray-400 dark:text-gray-500">{t('dashboard.no_projects')}</p>
